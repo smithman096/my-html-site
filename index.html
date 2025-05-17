@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Shiba Coder Test Queue Popmart Rocket</title>
   <style>
     body {
@@ -23,8 +23,14 @@
   </style>
 </head>
 <body>
-
   <h1>Shiba Coder Test Queue Popmart Rocket</h1>
+
+  <div class="group">
+    <h3>Summary</h3>
+    <p><strong>Selected Location:</strong> <span id="summary-location">-</span></p>
+    <p><strong>Selected Day:</strong> <span id="summary-day">-</span></p>
+    <p><strong>Selected Time:</strong> <span id="summary-time">-</span></p>
+  </div>
 
   <div class="group">
     <h3>Step 1: Register</h3>
@@ -67,86 +73,75 @@
   </div>
 
   <script>
-    const locations = [
-      "Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island",
-      "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere",
-      "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"
-    ];
+    document.addEventListener("DOMContentLoaded", () => {
+      const locations = [
+        "Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island",
+        "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere",
+        "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"
+      ];
 
-    const times = [
-      "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-      "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
-      "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"
-    ];
+      const times = [
+        "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+        "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
+        "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"
+      ];
 
-    // Generate location buttons
-    const locationDiv = document.getElementById("location-buttons");
-    locations.forEach(loc => {
-      const btn = document.createElement("button");
-      btn.textContent = loc;
-      locationDiv.appendChild(btn);
-    });
+      const summaryLocation = document.getElementById("summary-location");
+      const summaryDay = document.getElementById("summary-day");
+      const summaryTime = document.getElementById("summary-time");
 
-    // Generate day buttons
-    const dayDiv = document.getElementById("day-buttons");
-    for (let i = 1; i <= 31; i++) {
-      const btn = document.createElement("button");
-      btn.textContent = i;
-      dayDiv.appendChild(btn);
-    }
-
-    // Generate time buttons
-    const timeDiv = document.getElementById("time-buttons");
-    times.forEach(time => {
-      const btn = document.createElement("button");
-      btn.textContent = time;
-      timeDiv.appendChild(btn);
-    });
-
-    // Add click effects and logging
-    const allButtons = document.querySelectorAll('button');
-    allButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        console.log(`${btn.textContent} clicked`);
-        btn.classList.add('clicked');
-      });
-    });
-
-    document.querySelector('input[type="checkbox"]').addEventListener('click', () => {
-      console.log('Checkbox clicked');
-    });
-  
-    // ซ่อนทุกกลุ่มยกเว้นกลุ่มแรก
-    const groups = document.querySelectorAll('.group');
-    groups.forEach((group, index) => {
-      if (index !== 0) {
-        group.style.display = 'none';
-      }
-    });
-
-    // ฟังก์ชันเปิดกลุ่มถัดไปเมื่อกดปุ่มในแต่ละกลุ่ม
-    groups.forEach((group, index) => {
-      const buttons = group.querySelectorAll('button');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          // ถ้ามีขั้นตอนถัดไปให้แสดง
-          if (groups[index + 1]) {
-            groups[index + 1].style.display = 'block';
-          }
+      const locationDiv = document.getElementById("location-buttons");
+      locations.forEach(loc => {
+        const btn = document.createElement("button");
+        btn.textContent = loc;
+        btn.addEventListener("click", () => {
+          summaryLocation.textContent = loc;
         });
+        locationDiv.appendChild(btn);
       });
 
-      // กรณีเป็น checkbox ใน Step 7
-      const checkbox = group.querySelector('input[type="checkbox"]');
-      if (checkbox) {
-        checkbox.addEventListener('change', () => {
-          if (checkbox.checked && groups[index + 1]) {
-            groups[index + 1].style.display = 'block';
-          }
+      const dayDiv = document.getElementById("day-buttons");
+      for (let i = 1; i <= 31; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.addEventListener("click", () => {
+          summaryDay.textContent = i;
         });
+        dayDiv.appendChild(btn);
       }
+
+      const timeDiv = document.getElementById("time-buttons");
+      times.forEach(time => {
+        const btn = document.createElement("button");
+        btn.textContent = time;
+        btn.addEventListener("click", () => {
+          summaryTime.textContent = time;
+        });
+        timeDiv.appendChild(btn);
+      });
+
+      const groups = document.querySelectorAll(".group");
+      groups.forEach((group, index) => {
+        if (index !== 0 && index !== 1) group.style.display = "none";
+
+        const buttons = group.querySelectorAll("button");
+        buttons.forEach(btn => {
+          btn.addEventListener("click", () => {
+            btn.classList.add("clicked");
+            if (groups[index + 1]) groups[index + 1].style.display = "block";
+          });
+        });
+
+        const checkbox = group.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+          checkbox.addEventListener("change", () => {
+            if (checkbox.checked && groups[index + 1]) {
+              groups[index + 1].style.display = "block";
+            }
+          });
+        }
+      });
     });
   </script>
-
 </body>
 </html>
