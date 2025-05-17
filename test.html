@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BOT TEST PAGE - Full Options</title>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      line-height: 1.5;
+    }
+    .group {
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 3px;
+      padding: 8px 14px;
+      font-size: 14px;
+    }
+    .clicked {
+      background-color: #cfc !important;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BOT TEST PAGE - FULL</h1>
+
+  <div class="group">
+    <h3>Step 1: Register</h3>
+    <button>Register</button>
+  </div>
+
+  <div class="group">
+    <h3>Step 2: Select Location</h3>
+    <div id="location-buttons"></div>
+  </div>
+
+  <div class="group">
+    <h3>Step 3: Click Next</h3>
+    <button>Next</button>
+  </div>
+
+  <div class="group">
+    <h3>Step 4: Select Day</h3>
+    <div id="day-buttons"></div>
+  </div>
+
+  <div class="group">
+    <h3>Step 5: Select Time</h3>
+    <div id="time-buttons"></div>
+  </div>
+
+  <div class="group">
+    <h3>Step 6: Confirm</h3>
+    <button>Confirm</button>
+  </div>
+
+  <div class="group">
+    <h3>Step 7: Agreement</h3>
+    <input type="checkbox" /> I agree
+  </div>
+
+  <div class="group">
+    <h3>Step 8: Confirm Booking</h3>
+    <button>Confirm Booking</button>
+  </div>
+
+  <script>
+    const locations = [
+      "Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island",
+      "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere",
+      "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"
+    ];
+
+    const times = [
+      "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+      "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
+      "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"
+    ];
+
+    // Generate location buttons
+    const locationDiv = document.getElementById("location-buttons");
+    locations.forEach(loc => {
+      const btn = document.createElement("button");
+      btn.textContent = loc;
+      locationDiv.appendChild(btn);
+    });
+
+    // Generate day buttons
+    const dayDiv = document.getElementById("day-buttons");
+    for (let i = 1; i <= 31; i++) {
+      const btn = document.createElement("button");
+      btn.textContent = i;
+      dayDiv.appendChild(btn);
+    }
+
+    // Generate time buttons
+    const timeDiv = document.getElementById("time-buttons");
+    times.forEach(time => {
+      const btn = document.createElement("button");
+      btn.textContent = time;
+      timeDiv.appendChild(btn);
+    });
+
+    // Add click effects and logging
+    const allButtons = document.querySelectorAll('button');
+    allButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        console.log(`${btn.textContent} clicked`);
+        btn.classList.add('clicked');
+      });
+    });
+
+    document.querySelector('input[type="checkbox"]').addEventListener('click', () => {
+      console.log('Checkbox clicked');
+    });
+  
+    // ซ่อนทุกกลุ่มยกเว้นกลุ่มแรก
+    const groups = document.querySelectorAll('.group');
+    groups.forEach((group, index) => {
+      if (index !== 0) {
+        group.style.display = 'none';
+      }
+    });
+
+    // ฟังก์ชันเปิดกลุ่มถัดไปเมื่อกดปุ่มในแต่ละกลุ่ม
+    groups.forEach((group, index) => {
+      const buttons = group.querySelectorAll('button');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // ถ้ามีขั้นตอนถัดไปให้แสดง
+          if (groups[index + 1]) {
+            groups[index + 1].style.display = 'block';
+          }
+        });
+      });
+
+      // กรณีเป็น checkbox ใน Step 7
+      const checkbox = group.querySelector('input[type="checkbox"]');
+      if (checkbox) {
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked && groups[index + 1]) {
+            groups[index + 1].style.display = 'block';
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
