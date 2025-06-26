@@ -12,29 +12,34 @@
       color: white;
     }
 
-    #summary-location, #summary-day, #summary-time {
+    #summary-location {
       color: #ffffff;
       font-size: 25px;
+      font-weight: bold;
+    }
+
+    #summary-day {
+      color: #ffffff;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    #summary-time {
+      color: #ffffff;
+      font-size: 30px;
       font-weight: bold;
     }
 
     .group {
       margin-bottom: 20px;
     }
-
     button {
       margin: 3px;
       padding: 8px 14px;
       font-size: 14px;
     }
-
     .clicked {
       background-color: rgb(64, 235, 64) !important;
-    }
-
-    button:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
     }
   </style>
 </head>
@@ -102,11 +107,6 @@
         "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"
       ];
 
-      const enabledDays = [3, 5, 7, 10, 15, 18, 21, 25, 30]; // เฉพาะวันเหล่านี้เปิดให้เลือก
-      const enabledTimes = [
-        "10:30", "11:00", "13:00", "15:30", "17:00", "18:30", "19:00", "20:00", "22:00"
-      ]; // เฉพาะเวลาเหล่านี้เปิดให้เลือก
-
       const summaryLocation = document.getElementById("summary-location");
       const summaryDay = document.getElementById("summary-day");
       const summaryTime = document.getElementById("summary-time");
@@ -125,15 +125,9 @@
       for (let i = 1; i <= 31; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
-
-        if (enabledDays.includes(i)) {
-          btn.addEventListener("click", () => {
-            summaryDay.textContent = i;
-          });
-        } else {
-          btn.disabled = true;
-        }
-
+        btn.addEventListener("click", () => {
+          summaryDay.textContent = i;
+        });
         dayDiv.appendChild(btn);
       }
 
@@ -141,15 +135,9 @@
       times.forEach(time => {
         const btn = document.createElement("button");
         btn.textContent = time;
-
-        if (enabledTimes.includes(time)) {
-          btn.addEventListener("click", () => {
-            summaryTime.textContent = time;
-          });
-        } else {
-          btn.disabled = true;
-        }
-
+        btn.addEventListener("click", () => {
+          summaryTime.textContent = time;
+        });
         timeDiv.appendChild(btn);
       });
 
