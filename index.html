@@ -50,18 +50,36 @@
       display: inline-block;
       margin-top: 8px;
       cursor: pointer;
-      color: black; /* เพิ่มบรรทัดนี้เพื่อบังคับให้ font เป็นสีดำตอนปิด */
+      color: black;
+    }
+
+    #countdown-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      font-size: 120px;
+      font-weight: bold;
+      color: white;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
   <h1>Shiba Coder Test Queue Popmart Rocket</h1>
 
-  <div class="group">
-    <h3>⏱️ Time Taken</h3>
-    <p id="timer">0.000 seconds</p>
-  </div>
+  <!-- ✅ Countdown Overlay -->
+  <div id="countdown-overlay"></div>
 
+  <!-- ✅ Summary (เพิ่มกลับมาแล้ว) -->
   <div class="group">
     <h3>Summary</h3>
     <p><strong>Selected Location:</strong> <span id="summary-location">-</span></p>
@@ -69,14 +87,23 @@
     <p><strong>Selected Time:</strong> <span id="summary-time">-</span></p>
   </div>
 
-  <div class="group register-row">
+  <!-- ⏱️ Timer -->
+  <div class="group">
+    <h3>⏱️ Time Taken</h3>
+    <p id="timer">0.000 seconds</p>
+  </div>
+
+  <!-- Step 1: Register -->
+  <div class="group">
     <div style="display: flex; align-items: center; gap: 10px;">
       <h3 style="margin: 0;">Step 1: Register</h3>
       <button id="toggle-register-status">🔄 ON / OFF Register</button>
+      <button id="countdown-start">⏳ Countdown Start</button>
     </div>
     <div id="register-box" class="register" style="background-color: rgb(255, 255, 255);">Register</div>
   </div>
 
+  <!-- Step 2 - 8 -->
   <div class="group">
     <h3>Step 2: Select Location</h3>
     <div id="location-buttons"></div>
@@ -114,17 +141,8 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const locations = [
-        "Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island",
-        "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere",
-        "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"
-      ];
-
-      const times = [
-        "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-        "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30",
-        "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"
-      ];
+      const locations = ["Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island", "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere", "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"];
+      const times = ["10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"];
 
       const summaryLocation = document.getElementById("summary-location");
       const summaryDay = document.getElementById("summary-day");
@@ -134,9 +152,7 @@
       locations.forEach(loc => {
         const btn = document.createElement("button");
         btn.textContent = loc;
-        btn.addEventListener("click", () => {
-          summaryLocation.textContent = loc;
-        });
+        btn.addEventListener("click", () => summaryLocation.textContent = loc);
         locationDiv.appendChild(btn);
       });
 
@@ -144,9 +160,7 @@
       for (let i = 1; i <= 31; i++) {
         const btn = document.createElement("button");
         btn.textContent = i;
-        btn.addEventListener("click", () => {
-          summaryDay.textContent = i;
-        });
+        btn.addEventListener("click", () => summaryDay.textContent = i);
         dayDiv.appendChild(btn);
       }
 
@@ -154,22 +168,18 @@
       times.forEach(time => {
         const btn = document.createElement("button");
         btn.textContent = time;
-        btn.addEventListener("click", () => {
-          summaryTime.textContent = time;
-        });
+        btn.addEventListener("click", () => summaryTime.textContent = time);
         timeDiv.appendChild(btn);
       });
 
       const groups = document.querySelectorAll(".group");
       groups.forEach((group, index) => {
-        if (![0, 1, 2].includes(index)) group.style.display = "none";
+        if (index >= 3) group.style.display = "none"; // ซ่อนไว้ตั้งแต่ Step 2 เป็นต้นไป (index 3 เพราะ summary, timer ถูกเพิ่ม)
 
         const buttons = group.querySelectorAll("button");
         buttons.forEach(btn => {
+          if (btn.id === "toggle-register-status" || btn.id === "countdown-start") return;
           btn.addEventListener("click", () => {
-            // ❌ ข้ามปุ่ม toggle-register-status ไม่ให้ trigger
-            if (btn.id === "toggle-register-status") return;
-
             btn.classList.add("clicked");
             if (groups[index + 1]) groups[index + 1].style.display = "block";
           });
@@ -201,19 +211,16 @@
         clearInterval(intervalId);
       }
 
-      document.getElementById("confirm-booking-btn").addEventListener("click", () => {
-        stopTimer();
-      });
+      document.getElementById("confirm-booking-btn").addEventListener("click", () => stopTimer());
 
-      // ✅ Register div toggle + click
       let isRegisterOpen = false;
       const registerBox = document.getElementById("register-box");
       const toggleBtn = document.getElementById("toggle-register-status");
+      const countdownBtn = document.getElementById("countdown-start");
 
       function updateRegisterUI() {
-        registerBox.style.backgroundColor = isRegisterOpen
-          ? "rgb(221, 4, 32)"
-          : "rgb(255, 255, 255)";
+        registerBox.style.backgroundColor = isRegisterOpen ? "rgb(221, 4, 32)" : "rgb(255, 255, 255)";
+        registerBox.style.color = isRegisterOpen ? "white" : "black";
       }
 
       toggleBtn.addEventListener("click", () => {
@@ -221,13 +228,38 @@
         updateRegisterUI();
       });
 
+      countdownBtn.addEventListener("click", () => {
+        let count = 3;
+        countdownBtn.disabled = true;
+        const originalText = countdownBtn.textContent;
+        const overlay = document.getElementById("countdown-overlay");
+
+        overlay.textContent = count;
+        overlay.style.opacity = 1;
+
+        const interval = setInterval(() => {
+          count--;
+          if (count === 0) {
+            overlay.textContent = "GO!";
+          } else if (count < 0) {
+            clearInterval(interval);
+            overlay.style.opacity = 0;
+            countdownBtn.textContent = originalText;
+            countdownBtn.disabled = false;
+            isRegisterOpen = true;
+            updateRegisterUI();
+          } else {
+            overlay.textContent = count;
+          }
+        }, 1000);
+      });
+
       registerBox.addEventListener("click", () => {
         console.log("✅ Register clicked");
         registerBox.classList.add("clicked");
-        registerBox.style.backgroundColor = "rgb(64, 235, 64)"; // เขียวทันที
-        registerBox.style.color = "black"; // เปลี่ยนเฉพาะตัวอักษร
+        registerBox.style.backgroundColor = "rgb(64, 235, 64)";
+        registerBox.style.color = "black";
         startTimer();
-
         if (groups[3]) groups[3].style.display = "block";
       });
     });
