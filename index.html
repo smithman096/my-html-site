@@ -18,13 +18,7 @@
       font-weight: bold;
     }
 
-    #summary-day {
-      color: #ffffff;
-      font-size: 30px;
-      font-weight: bold;
-    }
-
-    #summary-time {
+    #summary-day, #summary-time {
       color: #ffffff;
       font-size: 30px;
       font-weight: bold;
@@ -33,18 +27,31 @@
     .group {
       margin-bottom: 20px;
     }
+
     button {
       margin: 3px;
       padding: 8px 14px;
       font-size: 14px;
     }
+
     .clicked {
       background-color: rgb(64, 235, 64) !important;
+    }
+
+    #timer {
+      font-size: 24px;
+      font-weight: bold;
+      color: yellow;
     }
   </style>
 </head>
 <body>
   <h1>Shiba Coder Test Queue Popmart Rocket</h1>
+
+  <div class="group">
+    <h3>⏱️ Time Taken</h3>
+    <p id="timer">0.000 seconds</p>
+  </div>
 
   <div class="group">
     <h3>Summary</h3>
@@ -55,7 +62,7 @@
 
   <div class="group">
     <h3>Step 1: Register</h3>
-    <button>Register</button>
+    <button id="register-btn">Register</button>
   </div>
 
   <div class="group">
@@ -90,7 +97,7 @@
 
   <div class="group">
     <h3>Step 8: Confirm Booking</h3>
-    <button>Confirm Booking</button>
+    <button id="confirm-booking-btn">Confirm Booking</button>
   </div>
 
   <script>
@@ -143,7 +150,8 @@
 
       const groups = document.querySelectorAll(".group");
       groups.forEach((group, index) => {
-        if (index !== 0 && index !== 1) group.style.display = "none";
+        // แสดงเฉพาะกลุ่ม index 0 (Timer), 1 (Summary), 2 (Register)
+if (![0, 1, 2].includes(index)) group.style.display = "none";
 
         const buttons = group.querySelectorAll("button");
         buttons.forEach(btn => {
@@ -161,6 +169,33 @@
             }
           });
         }
+      });
+
+      // ✅ เพิ่มส่วนจับเวลา
+      let startTime = null;
+      let intervalId = null;
+      const timerDisplay = document.getElementById("timer");
+
+      function startTimer() {
+        startTime = Date.now();
+      intervalId = setInterval(() => {
+        const diff = (Date.now() - startTime) / 1000;
+        timerDisplay.textContent = `${diff.toFixed(4)} seconds`;
+      }, 100);
+      }
+
+      function stopTimer() {
+        clearInterval(intervalId);
+      }
+
+      // เริ่มจับเวลาเมื่อกด Register
+      document.getElementById("register-btn").addEventListener("click", () => {
+        startTimer();
+      });
+
+      // หยุดจับเวลาเมื่อกด Confirm Booking
+      document.getElementById("confirm-booking-btn").addEventListener("click", () => {
+        stopTimer();
       });
     });
   </script>
