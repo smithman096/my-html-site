@@ -32,6 +32,7 @@
       margin: 3px;
       padding: 8px 14px;
       font-size: 14px;
+      cursor: pointer;
     }
 
     .clicked {
@@ -42,6 +43,14 @@
       font-size: 24px;
       font-weight: bold;
       color: yellow;
+    }
+
+    .register {
+      padding: 8px 14px;
+      display: inline-block;
+      margin-top: 8px;
+      cursor: pointer;
+      color: black; /* เพิ่มบรรทัดนี้เพื่อบังคับให้ font เป็นสีดำตอนปิด */
     }
   </style>
 </head>
@@ -60,9 +69,12 @@
     <p><strong>Selected Time:</strong> <span id="summary-time">-</span></p>
   </div>
 
-  <div class="group">
-    <h3>Step 1: Register</h3>
-    <button id="register-btn">Register</button>
+  <div class="group register-row">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <h3 style="margin: 0;">Step 1: Register</h3>
+      <button id="toggle-register-status">🔄 ON / OFF Register</button>
+    </div>
+    <div id="register-box" class="register" style="background-color: rgb(255, 255, 255);">Register</div>
   </div>
 
   <div class="group">
@@ -150,12 +162,14 @@
 
       const groups = document.querySelectorAll(".group");
       groups.forEach((group, index) => {
-        // แสดงเฉพาะกลุ่ม index 0 (Timer), 1 (Summary), 2 (Register)
-if (![0, 1, 2].includes(index)) group.style.display = "none";
+        if (![0, 1, 2].includes(index)) group.style.display = "none";
 
         const buttons = group.querySelectorAll("button");
         buttons.forEach(btn => {
           btn.addEventListener("click", () => {
+            // ❌ ข้ามปุ่ม toggle-register-status ไม่ให้ trigger
+            if (btn.id === "toggle-register-status") return;
+
             btn.classList.add("clicked");
             if (groups[index + 1]) groups[index + 1].style.display = "block";
           });
@@ -171,31 +185,50 @@ if (![0, 1, 2].includes(index)) group.style.display = "none";
         }
       });
 
-      // ✅ เพิ่มส่วนจับเวลา
       let startTime = null;
       let intervalId = null;
       const timerDisplay = document.getElementById("timer");
 
       function startTimer() {
         startTime = Date.now();
-      intervalId = setInterval(() => {
-        const diff = (Date.now() - startTime) / 1000;
-        timerDisplay.textContent = `${diff.toFixed(4)} seconds`;
-      }, 100);
+        intervalId = setInterval(() => {
+          const diff = (Date.now() - startTime) / 1000;
+          timerDisplay.textContent = `${diff.toFixed(4)} seconds`;
+        }, 100);
       }
 
       function stopTimer() {
         clearInterval(intervalId);
       }
 
-      // เริ่มจับเวลาเมื่อกด Register
-      document.getElementById("register-btn").addEventListener("click", () => {
-        startTimer();
-      });
-
-      // หยุดจับเวลาเมื่อกด Confirm Booking
       document.getElementById("confirm-booking-btn").addEventListener("click", () => {
         stopTimer();
+      });
+
+      // ✅ Register div toggle + click
+      let isRegisterOpen = false;
+      const registerBox = document.getElementById("register-box");
+      const toggleBtn = document.getElementById("toggle-register-status");
+
+      function updateRegisterUI() {
+        registerBox.style.backgroundColor = isRegisterOpen
+          ? "rgb(221, 4, 32)"
+          : "rgb(255, 255, 255)";
+      }
+
+      toggleBtn.addEventListener("click", () => {
+        isRegisterOpen = !isRegisterOpen;
+        updateRegisterUI();
+      });
+
+      registerBox.addEventListener("click", () => {
+        console.log("✅ Register clicked");
+        registerBox.classList.add("clicked");
+        registerBox.style.backgroundColor = "rgb(64, 235, 64)"; // เขียวทันที
+        registerBox.style.color = "black"; // เปลี่ยนเฉพาะตัวอักษร
+        startTimer();
+
+        if (groups[3]) groups[3].style.display = "block";
       });
     });
   </script>
