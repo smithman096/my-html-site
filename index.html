@@ -154,7 +154,8 @@
       console.log("✅ CAPTCHA Token:", token);
       alert("CAPTCHA token คือ: " + token);
 
-      // 👉 ส่ง token ไป backend ได้ตรงนี้ (fetch, axios, หรือ form submit)
+      // ✅ ปลดล็อกขั้นถัดไปหลังผ่าน reCAPTCHA
+      if (groups[3]) groups[3].style.display = "block";
     }
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -281,7 +282,7 @@
         // ✅ Show reCAPTCHA
         document.getElementById("recaptcha-wrapper").style.display = "block";
 
-        if (groups[3]) groups[3].style.display = "block";
+        // ❌ ไม่ปลดล็อกขั้นถัดไปที่นี่อีก
       });
     });
   </script>
