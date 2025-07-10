@@ -100,10 +100,12 @@
 
     <!-- ✅ reCAPTCHA Widget (ซ่อนไว้ก่อน) -->
     <div id="recaptcha-wrapper" style="display: none; margin-top: 20px;">
-      <div class="g-recaptcha" data-sitekey="6LeFQH4rAAAAAOy4yR6BqZ_Tru5CMRN_l9hLZrJv"></div>
-      <button id="verify-captcha-btn" style="margin-top: 10px;">Verify CAPTCHA</button>
+    <div
+        class="g-recaptcha"
+        data-sitekey="6LeFQH4rAAAAAOy4yR6BqZ_Tru5CMRN_l9hLZrJv"
+        data-callback="onCaptchaSuccess">
     </div>
-  </div>
+    </div>
 
   <!-- Step 2 - 8 -->
   <div class="group">
