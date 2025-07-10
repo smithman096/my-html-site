@@ -101,6 +101,7 @@
     <!-- ✅ reCAPTCHA Widget (ซ่อนไว้ก่อน) -->
     <div id="recaptcha-wrapper" style="display: none; margin-top: 20px;">
       <div class="g-recaptcha" data-sitekey="6LeFQH4rAAAAAOy4yR6BqZ_Tru5CMRN_l9hLZrJv"></div>
+      <button id="verify-captcha-btn" style="margin-top: 10px;">Verify CAPTCHA</button>
     </div>
   </div>
 
@@ -268,6 +269,24 @@
 
         if (groups[3]) groups[3].style.display = "block";
       });
+
+      // ✅ listener สำหรับปุ่ม verify captcha
+      const verifyCaptchaBtn = document.getElementById("verify-captcha-btn");
+      verifyCaptchaBtn.addEventListener("click", () => {
+        const token = grecaptcha.getResponse();
+
+        if (!token) {
+          alert("กรุณายืนยัน reCAPTCHA ก่อน!");
+          return;
+        }
+
+        console.log("✅ CAPTCHA Token:", token);
+        alert("CAPTCHA token คือ: " + token);
+
+        // 👉 ส่ง token ไป backend ได้ตรงนี้
+        // fetch(...) หรือ form.submit() ได้เลย
+      });
+
     });
   </script>
 </body>
