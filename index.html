@@ -72,6 +72,9 @@
       pointer-events: none;
     }
   </style>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
 </head>
 <body>
   <h1>Shiba Coder Test Queue Popmart Rocket</h1>
@@ -94,14 +97,19 @@
   </div>
 
   <!-- Step 1: Register -->
-  <div class="group">
+    <div class="group">
     <div style="display: flex; align-items: center; gap: 10px;">
-      <h3 style="margin: 0;">Step 1: Register</h3>
-      <button id="toggle-register-status">🔄 ON / OFF Register</button>
-      <button id="countdown-start">⏳ Countdown Start</button>
+        <h3 style="margin: 0;">Step 1: Register</h3>
+        <button id="toggle-register-status">🔄 ON / OFF Register</button>
+        <button id="countdown-start">⏳ Countdown Start</button>
     </div>
     <div id="register-box" class="register" style="background-color: rgb(255, 255, 255);">Register</div>
-  </div>
+
+    <!-- ✅ Turnstile Widget (ซ่อนไว้ก่อน) -->
+    <div id="turnstile-wrapper" style="display: none; margin-top: 20px;">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABklsVjr0LbIj1jL"></div>
+    </div>
+    </div>
 
   <!-- Step 2 - 8 -->
   <div class="group">
@@ -254,14 +262,19 @@
         }, 1000);
       });
 
-      registerBox.addEventListener("click", () => {
-        console.log("✅ Register clicked");
-        registerBox.classList.add("clicked");
-        registerBox.style.backgroundColor = "rgb(64, 235, 64)";
-        registerBox.style.color = "black";
-        startTimer();
-        if (groups[3]) groups[3].style.display = "block";
-      });
+    registerBox.addEventListener("click", () => {
+    console.log("✅ Register clicked");
+    registerBox.classList.add("clicked");
+    registerBox.style.backgroundColor = "rgb(64, 235, 64)";
+    registerBox.style.color = "black";
+    startTimer();
+
+    // ✅ เพิ่มบรรทัดนี้เพื่อโชว์ Turnstile
+    const turnstileWrapper = document.getElementById("turnstile-wrapper");
+    turnstileWrapper.style.display = "block";
+
+    if (groups[3]) groups[3].style.display = "block";
+    });
     });
   </script>
 </body>
