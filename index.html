@@ -11,40 +11,33 @@
       background-color: #e01405;
       color: white;
     }
-
     #summary-location {
       color: #ffffff;
       font-size: 25px;
       font-weight: bold;
     }
-
     #summary-day, #summary-time {
       color: #ffffff;
       font-size: 30px;
       font-weight: bold;
     }
-
     .group {
       margin-bottom: 20px;
     }
-
     button {
       margin: 3px;
       padding: 8px 14px;
       font-size: 14px;
       cursor: pointer;
     }
-
     .clicked {
       background-color: rgb(64, 235, 64) !important;
     }
-
     #timer {
       font-size: 24px;
       font-weight: bold;
       color: yellow;
     }
-
     .register {
       padding: 8px 14px;
       display: inline-block;
@@ -52,7 +45,6 @@
       cursor: pointer;
       color: black;
     }
-
     #countdown-overlay {
       position: fixed;
       top: 0;
@@ -73,7 +65,8 @@
     }
   </style>
 
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <!-- ✅ ใส่ reCAPTCHA Script -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 </head>
 <body>
@@ -82,7 +75,6 @@
   <!-- ✅ Countdown Overlay -->
   <div id="countdown-overlay"></div>
 
-  <!-- ✅ Summary (เพิ่มกลับมาแล้ว) -->
   <div class="group">
     <h3>Summary</h3>
     <p><strong>Selected Location:</strong> <span id="summary-location">-</span></p>
@@ -90,26 +82,27 @@
     <p><strong>Selected Time:</strong> <span id="summary-time">-</span></p>
   </div>
 
-  <!-- ⏱️ Timer -->
   <div class="group">
     <h3>⏱️ Time Taken</h3>
     <p id="timer">0.000 seconds</p>
   </div>
 
   <!-- Step 1: Register -->
-    <div class="group">
+  <div class="group">
     <div style="display: flex; align-items: center; gap: 10px;">
-        <h3 style="margin: 0;">Step 1: Register</h3>
-        <button id="toggle-register-status">🔄 ON / OFF Register</button>
-        <button id="countdown-start">⏳ Countdown Start</button>
+      <h3 style="margin: 0;">Step 1: Register</h3>
+      <button id="toggle-register-status">🔄 ON / OFF Register</button>
+      <button id="countdown-start">⏳ Countdown Start</button>
     </div>
-    <div id="register-box" class="register" style="background-color: rgb(255, 255, 255);">Register</div>
+    <div id="register-box" class="register" style="background-color: rgb(255, 255, 255);">
+      Register
+    </div>
 
-    <!-- ✅ Turnstile Widget (ซ่อนไว้ก่อน) -->
-    <div id="turnstile-wrapper" style="display: none; margin-top: 20px;">
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAABklsVjr0LbIj1jL"></div>
+    <!-- ✅ reCAPTCHA Widget (ซ่อนไว้ก่อน) -->
+    <div id="recaptcha-wrapper" style="display: none; margin-top: 20px;">
+      <div class="g-recaptcha" data-sitekey="6LeFQH4rAAAAAOy4yR6BqZ_Tru5CMRN_l9hLZrJv"></div>
     </div>
-    </div>
+  </div>
 
   <!-- Step 2 - 8 -->
   <div class="group">
@@ -182,7 +175,7 @@
 
       const groups = document.querySelectorAll(".group");
       groups.forEach((group, index) => {
-        if (index >= 3) group.style.display = "none"; // ซ่อนไว้ตั้งแต่ Step 2 เป็นต้นไป (index 3 เพราะ summary, timer ถูกเพิ่ม)
+        if (index >= 3) group.style.display = "none";
 
         const buttons = group.querySelectorAll("button");
         buttons.forEach(btn => {
@@ -262,19 +255,19 @@
         }, 1000);
       });
 
-    registerBox.addEventListener("click", () => {
-    console.log("✅ Register clicked");
-    registerBox.classList.add("clicked");
-    registerBox.style.backgroundColor = "rgb(64, 235, 64)";
-    registerBox.style.color = "black";
-    startTimer();
+      registerBox.addEventListener("click", () => {
+        console.log("✅ Register clicked");
+        registerBox.classList.add("clicked");
+        registerBox.style.backgroundColor = "rgb(64, 235, 64)";
+        registerBox.style.color = "black";
+        startTimer();
 
-    // ✅ เพิ่มบรรทัดนี้เพื่อโชว์ Turnstile
-    const turnstileWrapper = document.getElementById("turnstile-wrapper");
-    turnstileWrapper.style.display = "block";
+        // ✅ Show reCAPTCHA
+        const recaptchaWrapper = document.getElementById("recaptcha-wrapper");
+        recaptchaWrapper.style.display = "block";
 
-    if (groups[3]) groups[3].style.display = "block";
-    });
+        if (groups[3]) groups[3].style.display = "block";
+      });
     });
   </script>
 </body>
