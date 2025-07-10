@@ -11,33 +11,40 @@
       background-color: #e01405;
       color: white;
     }
+
     #summary-location {
       color: #ffffff;
       font-size: 25px;
       font-weight: bold;
     }
+
     #summary-day, #summary-time {
       color: #ffffff;
       font-size: 30px;
       font-weight: bold;
     }
+
     .group {
       margin-bottom: 20px;
     }
+
     button {
       margin: 3px;
       padding: 8px 14px;
       font-size: 14px;
       cursor: pointer;
     }
+
     .clicked {
       background-color: rgb(64, 235, 64) !important;
     }
+
     #timer {
       font-size: 24px;
       font-weight: bold;
       color: yellow;
     }
+
     .register {
       padding: 8px 14px;
       display: inline-block;
@@ -45,6 +52,7 @@
       cursor: pointer;
       color: black;
     }
+
     #countdown-overlay {
       position: fixed;
       top: 0;
@@ -65,14 +73,14 @@
     }
   </style>
 
-  <!-- ✅ ใส่ reCAPTCHA Script -->
+  <!-- ✅ reCAPTCHA script -->
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 </head>
 <body>
   <h1>Shiba Coder Test Queue Popmart Rocket</h1>
 
-  <!-- ✅ Countdown Overlay -->
+  <!-- Countdown Overlay -->
   <div id="countdown-overlay"></div>
 
   <div class="group">
@@ -87,7 +95,6 @@
     <p id="timer">0.000 seconds</p>
   </div>
 
-  <!-- Step 1: Register -->
   <div class="group">
     <div style="display: flex; align-items: center; gap: 10px;">
       <h3 style="margin: 0;">Step 1: Register</h3>
@@ -98,16 +105,16 @@
       Register
     </div>
 
-    <!-- ✅ reCAPTCHA Widget (ซ่อนไว้ก่อน) -->
+    <!-- ✅ reCAPTCHA widget (ซ่อนไว้ก่อน) -->
     <div id="recaptcha-wrapper" style="display: none; margin-top: 20px;">
-    <div
+      <div
         class="g-recaptcha"
         data-sitekey="6LeFQH4rAAAAAOy4yR6BqZ_Tru5CMRN_l9hLZrJv"
         data-callback="onCaptchaSuccess">
+      </div>
     </div>
-    </div>
+  </div>
 
-  <!-- Step 2 - 8 -->
   <div class="group">
     <h3>Step 2: Select Location</h3>
     <div id="location-buttons"></div>
@@ -144,6 +151,14 @@
   </div>
 
   <script>
+    // ✅ callback จาก reCAPTCHA
+    function onCaptchaSuccess(token) {
+      console.log("✅ CAPTCHA Token:", token);
+      alert("CAPTCHA token คือ: " + token);
+
+      // 👉 ส่ง token ไป backend ได้ตรงนี้ (fetch, axios, หรือ form submit)
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       const locations = ["Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island", "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere", "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"];
       const times = ["10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"];
@@ -266,29 +281,10 @@
         startTimer();
 
         // ✅ Show reCAPTCHA
-        const recaptchaWrapper = document.getElementById("recaptcha-wrapper");
-        recaptchaWrapper.style.display = "block";
+        document.getElementById("recaptcha-wrapper").style.display = "block";
 
         if (groups[3]) groups[3].style.display = "block";
       });
-
-      // ✅ listener สำหรับปุ่ม verify captcha
-      const verifyCaptchaBtn = document.getElementById("verify-captcha-btn");
-      verifyCaptchaBtn.addEventListener("click", () => {
-        const token = grecaptcha.getResponse();
-
-        if (!token) {
-          alert("กรุณายืนยัน reCAPTCHA ก่อน!");
-          return;
-        }
-
-        console.log("✅ CAPTCHA Token:", token);
-        alert("CAPTCHA token คือ: " + token);
-
-        // 👉 ส่ง token ไป backend ได้ตรงนี้
-        // fetch(...) หรือ form.submit() ได้เลย
-      });
-
     });
   </script>
 </body>
