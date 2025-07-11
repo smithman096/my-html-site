@@ -72,17 +72,14 @@
       pointer-events: none;
     }
   </style>
-
-  <!-- ✅ reCAPTCHA script -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
 </head>
 <body>
   <h1>Shiba Coder Test Queue Popmart Rocket</h1>
 
-  <!-- Countdown Overlay -->
+  <!-- ✅ Countdown Overlay -->
   <div id="countdown-overlay"></div>
 
+  <!-- ✅ Summary (เพิ่มกลับมาแล้ว) -->
   <div class="group">
     <h3>Summary</h3>
     <p><strong>Selected Location:</strong> <span id="summary-location">-</span></p>
@@ -90,11 +87,13 @@
     <p><strong>Selected Time:</strong> <span id="summary-time">-</span></p>
   </div>
 
+  <!-- ⏱️ Timer -->
   <div class="group">
     <h3>⏱️ Time Taken</h3>
     <p id="timer">0.000 seconds</p>
   </div>
 
+  <!-- Step 1: Register -->
   <div class="group">
     <div style="display: flex; align-items: center; gap: 10px;">
       <h3 style="margin: 0;">Step 1: Register</h3>
@@ -102,17 +101,9 @@
       <button id="countdown-start">⏳ Countdown Start</button>
     </div>
     <div id="register-box" class="register" style="background-color: rgb(255, 255, 255);">Register</div>
-
-    <!-- ✅ reCAPTCHA widget (ซ่อนไว้ก่อน) -->
-    <div id="recaptcha-wrapper" style="display: none; margin-top: 20px;">
-      <div
-        class="g-recaptcha"
-        data-sitekey="6LeFQH4rAAAAAOy4yR6BqZ_Tru5CMRN_l9hLZrJv"
-        data-callback="onCaptchaSuccess">
-      </div>
-    </div>
   </div>
 
+  <!-- Step 2 - 8 -->
   <div class="group">
     <h3>Step 2: Select Location</h3>
     <div id="location-buttons"></div>
@@ -149,15 +140,6 @@
   </div>
 
   <script>
-    // ✅ callback จาก reCAPTCHA
-    function onCaptchaSuccess(token) {
-      console.log("✅ CAPTCHA Token:", token);
-      alert("CAPTCHA token คือ: " + token);
-
-      // ✅ ปลดล็อกขั้นถัดไปหลังผ่าน reCAPTCHA
-      if (groups[3]) groups[3].style.display = "block";
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
       const locations = ["Terminal 21", "Central Ladprao", "Siam Center", "Fashion Island", "Centralworld", "MEGABANGNA", "Siam Square", "Emsphere", "Central Pattaya", "Seacon Square", "Central Westgate", "Central Chiangmai"];
       const times = ["10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30", "22:00", "22:30", "23:00"];
@@ -192,7 +174,7 @@
 
       const groups = document.querySelectorAll(".group");
       groups.forEach((group, index) => {
-        if (index >= 3) group.style.display = "none";
+        if (index >= 3) group.style.display = "none"; // ซ่อนไว้ตั้งแต่ Step 2 เป็นต้นไป (index 3 เพราะ summary, timer ถูกเพิ่ม)
 
         const buttons = group.querySelectorAll("button");
         buttons.forEach(btn => {
@@ -278,11 +260,7 @@
         registerBox.style.backgroundColor = "rgb(64, 235, 64)";
         registerBox.style.color = "black";
         startTimer();
-
-        // ✅ Show reCAPTCHA
-        document.getElementById("recaptcha-wrapper").style.display = "block";
-
-        // ❌ ไม่ปลดล็อกขั้นถัดไปที่นี่อีก
+        if (groups[3]) groups[3].style.display = "block";
       });
     });
   </script>
